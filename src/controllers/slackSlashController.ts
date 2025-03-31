@@ -1,8 +1,12 @@
 // src/controllers/slackSlashController.ts
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { slackClient } from "../services/slackService";
 
-export const handleSlashCommand = async (req: Request, res: Response) => {
+export const handleSlashCommand = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { trigger_id } = req.body;
 
@@ -35,20 +39,25 @@ export const handleSlashCommand = async (req: Request, res: Response) => {
       },
     });
 
-    res.send(""); // Immediate response to Slack
+    res.send("");
   } catch (error) {
     console.log(error);
+    next(error);
   }
 };
 
-export const handleInteraction = async (req: Request, res: Response) => {
+export const handleInteraction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const payload = JSON.parse(req.body.payload);
     const { type, user } = payload;
 
     // Modal submission
     if (type === "view_submission") {
-      res.send({}); // Respond immediately to Slack
+      res.send({});
 
       const state = payload.view.state.values;
       const approverId = state.approver_block.approver_select.selected_user;
@@ -106,5 +115,6 @@ export const handleInteraction = async (req: Request, res: Response) => {
     }
   } catch (error) {
     console.log(error);
+    next(error);
   }
 };
