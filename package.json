@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./dist/app.js",
+    "start": "node dist/app.js",
     "build": "tsc",
+    "heroku-postbuild": "npm run build",
     "dev": "npx ts-node-dev src/app.ts"
   },
   "keywords": [],
